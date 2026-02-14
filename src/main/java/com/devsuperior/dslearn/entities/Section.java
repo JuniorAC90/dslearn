@@ -1,15 +1,12 @@
 package com.devsuperior.dslearn.entities;
 
-import com.devsuperior.dslearn.entities.enums.ResourceType;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_resource")
-public class Resource {
+@Table(name = "tb_section")
+public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,28 +15,26 @@ public class Resource {
     private String description;
     private Integer position;
     private String imgUri;
-    private ResourceType type;
-    private String externalLink;
 
     @ManyToOne
-    @JoinColumn(name = "offer_id")
-    private Offer offer;
+    @JoinColumn(name = "resource_id")
+    private Resource resource;
 
-    @OneToMany(mappedBy = "resource")
-    private List<Section> sections = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "prerequisite_id")
+    private Section preRequisite;
 
-    public Resource() {
+    public Section() {
     }
 
-    public Resource(Long id, String title, String description, Integer position, String imgUri, ResourceType type, String externalLink, Offer offer) {
+    public Section(Long id, String title, String description, Integer position, String imgUri, Resource resource, Section preRequisite) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.position = position;
         this.imgUri = imgUri;
-        this.type = type;
-        this.externalLink = externalLink;
-        this.offer = offer;
+        this.resource = resource;
+        this.preRequisite = preRequisite;
     }
 
     public Long getId() {
@@ -82,35 +77,27 @@ public class Resource {
         this.imgUri = imgUri;
     }
 
-    public ResourceType getType() {
-        return type;
+    public Resource getResource() {
+        return resource;
     }
 
-    public void setType(ResourceType type) {
-        this.type = type;
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
 
-    public String getExternalLink() {
-        return externalLink;
+    public Section getPreRequisite() {
+        return preRequisite;
     }
 
-    public void setExternalLink(String externalLink) {
-        this.externalLink = externalLink;
-    }
-
-    public Offer getOffer() {
-        return offer;
-    }
-
-    public void setOffer(Offer offer) {
-        this.offer = offer;
+    public void setPreRequisite(Section preRequisite) {
+        this.preRequisite = preRequisite;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Resource resource = (Resource) o;
-        return Objects.equals(id, resource.id);
+        Section section = (Section) o;
+        return Objects.equals(id, section.id);
     }
 
     @Override
